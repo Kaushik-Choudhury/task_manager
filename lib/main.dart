@@ -6,7 +6,6 @@ import 'view_models/home_view_model.dart';
 import 'views/home_view.dart';
 import 'views/login_view.dart';
 import 'utils/custom_colors.dart';
-import 'services/firebase_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,12 +29,10 @@ class MyApp extends StatelessWidget {
           scaffoldBackgroundColor: CustomColors.darkBackground,
           appBarTheme: AppBarTheme(
             color: CustomColors.darkBackground,
-            textTheme: TextTheme(
-              headline6: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: CustomColors.textWhite,
-              ),
+            titleTextStyle: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: CustomColors.textWhite,
             ),
           ),
         ),
