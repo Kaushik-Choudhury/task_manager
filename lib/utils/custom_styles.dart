@@ -1,25 +1,22 @@
 import 'package:flutter/material.dart';
-import 'custom_colors.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CustomStyles {
-  static const TextStyle appBarTitle = TextStyle(
+  static final TextStyle titleStyle = GoogleFonts.roboto(
     fontSize: 24,
     fontWeight: FontWeight.bold,
-    color: CustomColors.textWhite,
+    color: Colors.white,
   );
 
-  static const TextStyle taskTitle = TextStyle(
-    fontSize: 18,
-    color: CustomColors.textWhite,
-  );
-
-  static const TextStyle taskSubtitle = TextStyle(
-    fontSize: 14,
-    color: CustomColors.textWhite,
-  );
-
-  static const TextStyle bodyText = TextStyle(
+  static final TextStyle subtitleStyle = GoogleFonts.roboto(
     fontSize: 16,
-    color: CustomColors.textWhite,
+    fontWeight: FontWeight.normal,
+    color: Colors.grey,
+  );
+
+  static final TextStyle buttonStyle = GoogleFonts.roboto(
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+    color: Colors.white,
   );
 }

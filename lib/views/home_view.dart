@@ -4,6 +4,8 @@ import '../view_models/home_view_model.dart';
 import '../view_models/auth_view_model.dart';
 import '../widgets/task_tile.dart';
 import '../widgets/task_form.dart';
+import '../widgets/search_bar.dart' as CustomSearchBar; // Alias the SearchBar import
+// Import other necessary widgets
 
 class HomeView extends StatelessWidget {
   @override
@@ -23,33 +25,44 @@ class HomeView extends StatelessWidget {
           ),
         ],
       ),
-      body: ListView.builder(
-        itemCount: homeViewModel.tasks.length,
-        itemBuilder: (context, index) {
-          final task = homeViewModel.tasks[index];
-          return TaskTile(
-            task: task,
-            onTaskToggle: () {
-              homeViewModel.toggleTaskCompletion(task);
+      body: Column(
+        children: [
+          CustomSearchBar.SearchBar( // Use the alias CustomSearchBar to refer to your SearchBar widget
+            onSearch: (query) {
+              homeViewModel.searchTasks(query);
             },
-            onTaskDelete: () {
-              homeViewModel.deleteTask(task.id);
-            },
-            onTaskEdit: () {
-              showModalBottomSheet(
-                context: context,
-                builder: (context) {
-                  return TaskForm(
-                    task: task,
-                    onSave: (updatedTask) {
-                      homeViewModel.addTask(updatedTask);
-                    },
-                  );
-                },
-              );
-            },
-          );
-        },
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: homeViewModel.tasks.length,
+              itemBuilder: (context, index) {
+                final task = homeViewModel.tasks[index];
+                return TaskTile(
+                  task: task,
+                  onTaskToggle: () {
+                    homeViewModel.toggleTaskCompletion(task);
+                  },
+                  onTaskDelete: () {
+                    homeViewModel.deleteTask(task.id);
+                  },
+                  onTaskEdit: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return TaskForm(
+                          task: task,
+                          onSave: (updatedTask) {
+                            homeViewModel.addTask(updatedTask);
+                          },
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

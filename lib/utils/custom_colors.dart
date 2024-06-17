@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CustomColors {
-  static const Color darkBackground = Color(0xFF121212);
-  static const Color accentPurple = Color(0xFFBB86FC);
-  static const Color textWhite = Color(0xFFFFFFFF);
+  static final Color accentPurple = Color(0xFF8A56AC);
+  static final Color darkBackground = Color(0xFF121212);
+  static final Color textWhite = Color(0xFFFFFFFF);
 }

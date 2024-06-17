@@ -2,47 +2,32 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/task.dart';
 
 class FirebaseService {
-  final CollectionReference _tasksCollection = FirebaseFirestore.instance.collection('tasks');
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  Stream<List<Task>> getTasks() {
-    return _tasksCollection.snapshots().map((snapshot) =>
-      snapshot.docs.map((doc) => Task.fromSnapshot(doc)).toList()
-    );
-  }
-
-  Stream<List<Task>> getTasksByUser(String userId) {
-    return _tasksCollection.where('assignedTo', isEqualTo: userId).snapshots().map((snapshot) =>
-      snapshot.docs.map((doc) => Task.fromSnapshot(doc)).toList()
-    );
-  }
-
-  Stream<List<Task>> getTasksByCategory(String category) {
-    return _tasksCollection.where('category', isEqualTo: category).snapshots().map((snapshot) =>
-      snapshot.docs.map((doc) => Task.fromSnapshot(doc)).toList()
-    );
+  Future<List<Task>> getTasks() async {
+    final snapshot = await _db.collection('tasks').get();
+    return snapshot.docs.map((doc) => Task.fromMap(doc.data())).toList();
   }
 
   Future<void> addTask(Task task) async {
-    try {
-      await _tasksCollection.add(task.toMap());
-    } catch (e) {
-      print('Error adding task: $e');
-    }
-  }
-
-  Future<void> updateTask(Task task) async {
-    try {
-      await _tasksCollection.doc(task.id).update(task.toMap());
-    } catch (e) {
-      print('Error updating task: $e');
-    }
+    await _db.collection('tasks').add(task.toMap());
   }
 
   Future<void> deleteTask(String id) async {
-    try {
-      await _tasksCollection.doc(id).delete();
-    } catch (e) {
-      print('Error deleting task: $e');
-    }
+    await _db.collection('tasks').doc(id).delete();
+  }
+
+  Future<void> updateTask(Task task) async {
+    await _db.collection('tasks').doc(task.id).update(task.toMap());
+  }
+
+  Future<List<Task>> searchTasks(String query) async {
+    final snapshot = await _db
+        .collection('tasks')
+        .where('title', isGreaterThanOrEqualTo: query)
+        .where('title', isLessThan: query + 'z')
+        .get();
+    
+    return snapshot.docs.map((doc) => Task.fromMap(doc.data())).toList();
   }
 }
