@@ -3,6 +3,8 @@ plugins {
     id "kotlin-android"
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id "dev.flutter.flutter-gradle-plugin"
+    id: 'com.google.gms.google-services'
+
 }
 
 def localProperties = new Properties()
@@ -22,6 +24,14 @@ def flutterVersionName = localProperties.getProperty("flutter.versionName")
 if (flutterVersionName == null) {
     flutterVersionName = "1.0"
 }
+
+
+buildscript {
+  dependencies {
+    classpath 'com.google.gms:google-services:latest_version'
+  }
+}
+
 
 android {
     namespace = "com.example.task_manager"
