@@ -5,29 +5,42 @@ class TaskTile extends StatelessWidget {
   final Task task;
   final Function onTaskToggle;
   final Function onTaskDelete;
+  final Function onTaskEdit;
 
-  const TaskTile({
+  TaskTile({
     required this.task,
     required this.onTaskToggle,
     required this.onTaskDelete,
+    required this.onTaskEdit,
   });
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(
-        task.title,
-        style: TextStyle(
-          decoration: task.isCompleted ? TextDecoration.lineThrough : TextDecoration.none,
-        ),
+      title: Text(task.title, style: TextStyle(fontSize: 18, color: Colors.white)),
+      subtitle: Text(
+        task.description,
+        style: TextStyle(color: Colors.grey),
       ),
-      leading: Checkbox(
-        value: task.isCompleted,
-        onChanged: (value) => onTaskToggle(),
-      ),
-      trailing: IconButton(
-        icon: Icon(Icons.delete),
-        onPressed: () => onTaskDelete(),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          IconButton(
+            icon: Icon(Icons.edit, color: Colors.blue),
+            onPressed: () => onTaskEdit(),
+          ),
+          IconButton(
+            icon: Icon(Icons.delete, color: Colors.red),
+            onPressed: () => onTaskDelete(),
+          ),
+          Checkbox(
+            value: task.isCompleted,
+            onChanged: (bool? value) {
+              onTaskToggle();
+            },
+            activeColor: Colors.green,
+          ),
+        ],
       ),
     );
   }
