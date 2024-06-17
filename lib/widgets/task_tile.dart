@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/task.dart';
+import '../utils/custom_styles.dart';
 
 class TaskTile extends StatelessWidget {
   final Task task;
@@ -16,31 +17,35 @@ class TaskTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(task.title, style: TextStyle(fontSize: 18, color: Colors.white)),
-      subtitle: Text(
-        task.description,
-        style: TextStyle(color: Colors.grey),
-      ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          IconButton(
-            icon: Icon(Icons.edit, color: Colors.blue),
-            onPressed: () => onTaskEdit(),
-          ),
-          IconButton(
-            icon: Icon(Icons.delete, color: Colors.red),
-            onPressed: () => onTaskDelete(),
-          ),
-          Checkbox(
-            value: task.isCompleted,
-            onChanged: (bool? value) {
-              onTaskToggle();
-            },
-            activeColor: Colors.green,
-          ),
-        ],
+    return Card(
+      elevation: 3,
+      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      child: ListTile(
+        title: Text(task.title, style: CustomStyles.titleStyle),
+        subtitle: Text(
+          task.description,
+          style: CustomStyles.subtitleStyle,
+        ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              icon: Icon(Icons.edit, color: Colors.blue),
+              onPressed: () => onTaskEdit(),
+            ),
+            IconButton(
+              icon: Icon(Icons.delete, color: Colors.red),
+              onPressed: () => onTaskDelete(),
+            ),
+            Checkbox(
+              value: task.isCompleted,
+              onChanged: (bool? value) {
+                onTaskToggle();
+              },
+              activeColor: Colors.green,
+            ),
+          ],
+        ),
       ),
     );
   }
