@@ -16,7 +16,7 @@ class HomeViewModel extends ChangeNotifier {
 
   void _loadTasks() async {
     final snapshot = await _db.collection('tasks').get();
-    _tasks = snapshot.docs.map((doc) => Task.fromMap(doc.data())).toList();
+    _tasks = snapshot.docs.map((doc) => Task.fromMap(doc.data(), doc.id)).toList();
     notifyListeners();
   }
 

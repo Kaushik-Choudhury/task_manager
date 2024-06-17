@@ -10,15 +10,39 @@ class FirebaseService {
     );
   }
 
-  Future<void> addTask(Task task) {
-    return _tasksCollection.add(task.toMap());
+  Stream<List<Task>> getTasksByUser(String userId) {
+    return _tasksCollection.where('assignedTo', isEqualTo: userId).snapshots().map((snapshot) =>
+      snapshot.docs.map((doc) => Task.fromSnapshot(doc)).toList()
+    );
   }
 
-  Future<void> updateTask(Task task) {
-    return _tasksCollection.doc(task.id).update(task.toMap());
+  Stream<List<Task>> getTasksByCategory(String category) {
+    return _tasksCollection.where('category', isEqualTo: category).snapshots().map((snapshot) =>
+      snapshot.docs.map((doc) => Task.fromSnapshot(doc)).toList()
+    );
   }
 
-  Future<void> deleteTask(String id) {
-    return _tasksCollection.doc(id).delete();
+  Future<void> addTask(Task task) async {
+    try {
+      await _tasksCollection.add(task.toMap());
+    } catch (e) {
+      print('Error adding task: $e');
+    }
+  }
+
+  Future<void> updateTask(Task task) async {
+    try {
+      await _tasksCollection.doc(task.id).update(task.toMap());
+    } catch (e) {
+      print('Error updating task: $e');
+    }
+  }
+
+  Future<void> deleteTask(String id) async {
+    try {
+      await _tasksCollection.doc(id).delete();
+    } catch (e) {
+      print('Error deleting task: $e');
+    }
   }
 }

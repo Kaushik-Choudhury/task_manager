@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Task {
   String id;
   String title;
@@ -32,9 +34,9 @@ class Task {
     };
   }
 
-  static Task fromMap(Map<String, dynamic> map) {
+  static Task fromMap(Map<String, dynamic> map, String id) {
     return Task(
-      id: map['id'],
+      id: id,
       title: map['title'],
       description: map['description'],
       category: map['category'],
@@ -43,5 +45,10 @@ class Task {
       dueDate: DateTime.parse(map['dueDate']),
       priority: map['priority'],
     );
+  }
+
+  static Task fromSnapshot(DocumentSnapshot snapshot) {
+    final data = snapshot.data() as Map<String, dynamic>;
+    return Task.fromMap(data, snapshot.id);
   }
 }
