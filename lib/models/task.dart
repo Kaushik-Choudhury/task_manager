@@ -2,21 +2,19 @@ class Task {
   String id;
   String title;
   String description;
-  String category;
-  String assignedTo;
-  bool isCompleted;
   DateTime dueDate;
   String priority;
+  bool isCompleted;
+  String assignedTo;
 
   Task({
     required this.id,
     required this.title,
-    this.description = '',
-    this.category = 'General',
-    this.assignedTo = '',
-    this.isCompleted = false,
+    required this.description,
     required this.dueDate,
-    this.priority = 'Medium',
+    required this.priority,
+    required this.isCompleted,
+    required this.assignedTo,
   });
 
   Map<String, dynamic> toMap() {
@@ -24,11 +22,10 @@ class Task {
       'id': id,
       'title': title,
       'description': description,
-      'category': category,
-      'assignedTo': assignedTo,
-      'isCompleted': isCompleted,
       'dueDate': dueDate.toIso8601String(),
       'priority': priority,
+      'isCompleted': isCompleted,
+      'assignedTo': assignedTo,
     };
   }
 
@@ -37,11 +34,10 @@ class Task {
       id: map['id'],
       title: map['title'],
       description: map['description'],
-      category: map['category'],
-      assignedTo: map['assignedTo'],
-      isCompleted: map['isCompleted'],
       dueDate: DateTime.parse(map['dueDate']),
       priority: map['priority'],
+      isCompleted: map['isCompleted'],
+      assignedTo: map['assignedTo'],
     );
   }
 }

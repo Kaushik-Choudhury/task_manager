@@ -4,9 +4,9 @@ import '../utils/custom_styles.dart';
 
 class TaskForm extends StatefulWidget {
   final Task? task;
-  final Function onSave;
+  final Function(Task) onSave;
 
-  TaskForm({this.task, required this.onSave});
+  TaskForm({Key? key, this.task, required this.onSave}) : super(key: key);
 
   @override
   _TaskFormState createState() => _TaskFormState();
@@ -16,6 +16,7 @@ class _TaskFormState extends State<TaskForm> {
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _titleController;
   late TextEditingController _descriptionController;
+  late TextEditingController _assignedToController;
   late DateTime _dueDate;
   late String _priority;
 
@@ -24,6 +25,7 @@ class _TaskFormState extends State<TaskForm> {
     super.initState();
     _titleController = TextEditingController(text: widget.task?.title ?? '');
     _descriptionController = TextEditingController(text: widget.task?.description ?? '');
+    _assignedToController = TextEditingController(text: widget.task?.assignedTo ?? '');
     _dueDate = widget.task?.dueDate ?? DateTime.now();
     _priority = widget.task?.priority ?? 'Medium';
   }
@@ -52,6 +54,17 @@ class _TaskFormState extends State<TaskForm> {
             TextFormField(
               controller: _descriptionController,
               decoration: InputDecoration(labelText: 'Description'),
+            ),
+            SizedBox(height: 12),
+            TextFormField(
+              controller: _assignedToController,
+              decoration: InputDecoration(labelText: 'Assigned To'),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter the name of the person assigned to this task';
+                }
+                return null;
+              },
             ),
             SizedBox(height: 12),
             Row(
@@ -100,6 +113,8 @@ class _TaskFormState extends State<TaskForm> {
                     id: widget.task?.id ?? UniqueKey().toString(),
                     title: _titleController.text,
                     description: _descriptionController.text,
+                    isCompleted: widget.task?.isCompleted ?? false,
+                    assignedTo: _assignedToController.text,
                     dueDate: _dueDate,
                     priority: _priority,
                   ));
@@ -118,6 +133,7 @@ class _TaskFormState extends State<TaskForm> {
   void dispose() {
     _titleController.dispose();
     _descriptionController.dispose();
+    _assignedToController.dispose();
     super.dispose();
   }
 }

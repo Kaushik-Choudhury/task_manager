@@ -1,81 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../view_models/home_view_model.dart';
-import '../view_models/auth_view_model.dart';
-import '../widgets/task_tile.dart';
-import '../widgets/task_form.dart';
-import '../widgets/search_bar.dart' as CustomSearchBar; // Alias the SearchBar import
-// Import other necessary widgets
+import 'package:task_manager/view_models/home_view_model.dart';
+import 'project_view.dart';
 
 class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final homeViewModel = Provider.of<HomeViewModel>(context);
-    final authViewModel = Provider.of<AuthViewModel>(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tasks', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white)),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.logout),
-            onPressed: () {
-              authViewModel.signOut();
-            },
-          ),
-        ],
+        title: Text('Projects'),
       ),
-      body: Column(
-        children: [
-          CustomSearchBar.SearchBar( // Use the alias CustomSearchBar to refer to your SearchBar widget
-            onSearch: (query) {
-              homeViewModel.searchTasks(query);
-            },
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: homeViewModel.tasks.length,
-              itemBuilder: (context, index) {
-                final task = homeViewModel.tasks[index];
-                return TaskTile(
-                  task: task,
-                  onTaskToggle: () {
-                    homeViewModel.toggleTaskCompletion(task);
-                  },
-                  onTaskDelete: () {
-                    homeViewModel.deleteTask(task.id);
-                  },
-                  onTaskEdit: () {
-                    showModalBottomSheet(
-                      context: context,
-                      builder: (context) {
-                        return TaskForm(
-                          task: task,
-                          onSave: (updatedTask) {
-                            homeViewModel.addTask(updatedTask);
-                          },
-                        );
-                      },
-                    );
-                  },
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showModalBottomSheet(
-            context: context,
-            builder: (context) {
-              return TaskForm(
-                onSave: (newTask) {
-                  homeViewModel.addTask(newTask);
-                },
+      body: ListView.builder(
+        itemCount: homeViewModel.projects.length,
+        itemBuilder: (context, index) {
+          final project = homeViewModel.projects[index];
+          return ListTile(
+            title: Text(project.name),
+            subtitle: Text(project.description),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProjectView(project: project),
+                ),
               );
             },
           );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Open a dialog to add a new project
         },
         child: Icon(Icons.add),
       ),

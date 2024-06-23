@@ -1,51 +1,47 @@
 import 'package:flutter/material.dart';
 import '../models/task.dart';
-import '../utils/custom_styles.dart';
 
 class TaskTile extends StatelessWidget {
   final Task task;
-  final Function onTaskToggle;
-  final Function onTaskDelete;
-  final Function onTaskEdit;
+  final Function(Task) onTaskToggle;
+  final Function(Task) onTaskDelete;
+  final Function(Task) onTaskEdit;
 
   TaskTile({
+    Key? key,
     required this.task,
     required this.onTaskToggle,
     required this.onTaskDelete,
     required this.onTaskEdit,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 3,
-      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      child: ListTile(
-        title: Text(task.title, style: CustomStyles.titleStyle),
-        subtitle: Text(
-          task.description,
-          style: CustomStyles.subtitleStyle,
-        ),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            IconButton(
-              icon: Icon(Icons.edit, color: Colors.blue),
-              onPressed: () => onTaskEdit(),
-            ),
-            IconButton(
-              icon: Icon(Icons.delete, color: Colors.red),
-              onPressed: () => onTaskDelete(),
-            ),
-            Checkbox(
-              value: task.isCompleted,
-              onChanged: (bool? value) {
-                onTaskToggle();
-              },
-              activeColor: Colors.green,
-            ),
-          ],
-        ),
+    return ListTile(
+      title: Text(task.title),
+      subtitle: Text('Assigned to: ${task.assignedTo}'),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Checkbox(
+            value: task.isCompleted,
+            onChanged: (value) {
+              onTaskToggle(task);
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.edit),
+            onPressed: () {
+              onTaskEdit(task);
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.delete),
+            onPressed: () {
+              onTaskDelete(task);
+            },
+          ),
+        ],
       ),
     );
   }
